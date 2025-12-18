@@ -65,6 +65,11 @@
         android:text="@string/pesquisar"
         android:onClick="btPesquisarOnClick"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/listar"
+        android:onClick="btListarOnClick"/>
 
 
 </LinearLayout>
