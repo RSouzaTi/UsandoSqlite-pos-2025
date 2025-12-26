@@ -15,8 +15,8 @@ class DatabaseHandler private constructor(context: Context) :
         val DATABASE_NAME = "bdfile.sqlite"
         val TABLE_NAME = "cadastro"
         val COL_ID = "0"
-        val COL_NOME = "0"
-        val COL_TELEFONE = "0"
+        val COL_NOME: String = "1"
+        val COL_TELEFONE: String = "2"
 
 
         @Volatile

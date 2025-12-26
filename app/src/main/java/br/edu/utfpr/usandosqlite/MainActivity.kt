@@ -1,6 +1,6 @@
 package br.edu.utfpr.usandosqlite
 
-import android.content.ContentValues
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -37,8 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         //Validação dos campos da tela
     fun btIncluirOnClick(view: View) {
-        val cadastro = Cadastro(
-            binding.etCod.text.toString().toInt(),
+        val cadastro = Cadastro(binding.etCod.text.toString().toInt(),
             binding.etNome.text.toString(),
             binding.etTelefone.text.toString()
         )
@@ -112,25 +111,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun btListarOnClick(view: View) {
+        val intent = Intent(this, ListarActivity::class.java)
+        startActivity(intent)
+    }
+
+
         //Acessa o banco de dados e lista os registros
-        val registros = banco.listar()
+       // val registros = banco.listar()
 
         //Monta a saída para o usuário
-        val saida = StringBuilder()
+        //val saida = StringBuilder()
 
-        while (registros.moveToNext()) {
-            val nome = registros.getString(1)
-            val telefone  = registros.getString(2)
+        //while (registros.moveToNext()) {
+        //   val nome = registros.getString(DatabaseHandler.COL_NOME.toInt())
+        //  val telefone  = registros.getString(DatabaseHandler.COL_TELEFONE.toInt())
+        //
+        //   saida.append("${nome} - ${telefone} \n")
+        // }
+        // Toast.makeText(
+        //    this,
+        //   saida.toString(),
+        //    Toast.LENGTH_SHORT)
+         //   .show()
 
-            saida.append("${nome} - ${telefone} \n")
-        }
-        Toast.makeText(
-            this,
-            saida.toString(),
-            Toast.LENGTH_SHORT)
-            .show()
 
 
-        }
-    }
+    } //Fim da classe MainActivity
 
