@@ -13,6 +13,7 @@
         android:theme="@style/Theme.UsandoSqlite">
         <activity
             android:name=".ListarActivity"
+            android:label="Registros Salvos"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
