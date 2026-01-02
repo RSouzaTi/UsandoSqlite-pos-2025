@@ -37,8 +37,8 @@ class MainActivity : AppCompatActivity() {
 
         //Validação dos campos da tela
     fun btIncluirOnClick(view: View) {
-        val cadastro = Cadastro(binding.etCod.text.toString().toInt(),
-            binding.etNome.text.toString(),
+        val cadastro = Cadastro(
+            binding.etCod.text.toString().toInt(), binding.etNome.text.toString(),
             binding.etTelefone.text.toString()
         )
             //Acessa o banco de dados e insere o registro

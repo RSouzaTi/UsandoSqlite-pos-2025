@@ -41,7 +41,7 @@ class DatabaseHandler private constructor(context: Context) :
         oldVersion: Int,
         newVersion: Int
     ) {
-        banco?.execSQL("DROP TABLE IF EXISTS cadastro")
+        banco?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(banco)
 
     }
