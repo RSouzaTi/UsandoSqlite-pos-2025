@@ -4,8 +4,11 @@
     <string name="nome">Nome:</string>
     <string name="telefone">Telefone:</string>
     <string name="incluir">Incluir</string>
-    <string name="salvar">Alterar</string>
+    <string name="salvar">Salvar</string>
     <string name="excluir">Excluir</string>
     <string name="pesquisar">Pesquisar</string>
     <string name="listar">Listar</string>
+    <string name="inclus_o_realizada_com_sucesso">Inclusão realizada com sucesso</string>
+    <string name="altera_o_realizada_com_sucesso">Alteração realizada com sucesso</string>
+    <string name="nenhum_registro_encontrado">Nenhum registro encontrado.</string>
 </resources>

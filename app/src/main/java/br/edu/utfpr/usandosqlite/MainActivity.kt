@@ -32,12 +32,12 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-          initView()
+        initView()
     }
 
     private fun initView() {
         if (intent.getIntExtra("cod", 0) != 0) {
-            binding.etCod.setText( intent.getIntExtra("cod",  0).toString())
+            binding.etCod.setText(intent.getIntExtra("cod", 0).toString())
             binding.etNome.setText(intent.getStringExtra("nome"))
             binding.etTelefone.setText(intent.getStringExtra("telefone"))
 
@@ -49,31 +49,26 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
-    //Validação dos campos da tela
-    fun btIncluirOnClick(view: View) {
-        val cadastro = Cadastro ( binding.etCod.text.toString().toInt(), binding.etNome.text.toString(),
-            binding.etTelefone.text.toString()
-        )
-            //Acessa o banco de dados e insere o registro
+    fun btSalvarOnClick(view: View) {
+        if (binding.etCod.text.toString().isEmpty()) {
+            val cadastro = Cadastro(
+                _id = 0,
+                nome = binding.etNome.text.toString(),
+                telefone = binding.etTelefone.text.toString()
+            )
+            //acesso ao banco
             banco.inserir(cadastro)
-
-        //Apresentação da devolutiva visual para o usuário
-        Toast.makeText(
-            this,
-            "Registro inserido com sucesso",
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-
-    fun btAlterarOnClick(view: View) {
-        //Cria um objeto do tipo Cadastro com os dados da tela
-        val cadastro = Cadastro(binding.etCod.text.toString().toInt(),
-            binding.etNome.text.toString(),
-            binding.etTelefone.text.toString()
-        )
-            //Acessa o banco de dados e altera o registro
+            var msg = getString(R.string.inclus_o_realizada_com_sucesso)
+        } else {
+            val cadastro = Cadastro(
+                _id = binding.etCod.text.toString().toInt(),
+                nome = binding.etNome.text.toString(),
+                telefone = binding.etTelefone.text.toString()
+            )
+            //acesso ao banco
             banco.alterar(cadastro)
+            var msg = getString(R.string.altera_o_realizada_com_sucesso)
+        }
 
         //Mostra uma mensagem de sucesso na tela
         Toast.makeText(
@@ -107,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 
         if (cadastro != null) {
 
-            binding.etNome.setText( cadastro.nome)
+            binding.etNome.setText(cadastro.nome)
             binding.etTelefone.setText(cadastro.telefone)
 
         } else {
@@ -130,25 +125,24 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-        //Acessa o banco de dados e lista os registros
-       // val registros = banco.listar()
+    //Acessa o banco de dados e lista os registros
+    // val registros = banco.listar()
 
-        //Monta a saída para o usuário
-        //val saida = StringBuilder()
+    //Monta a saída para o usuário
+    //val saida = StringBuilder()
 
-        //while (registros.moveToNext()) {
-        //   val nome = registros.getString(DatabaseHandler.COL_NOME.toInt())
-        //  val telefone  = registros.getString(DatabaseHandler.COL_TELEFONE.toInt())
-        //
-        //   saida.append("${nome} - ${telefone} \n")
-        // }
-        // Toast.makeText(
-        //    this,
-        //   saida.toString(),
-        //    Toast.LENGTH_SHORT)
-         //   .show()
+    //while (registros.moveToNext()) {
+    //   val nome = registros.getString(DatabaseHandler.COL_NOME.toInt())
+    //  val telefone  = registros.getString(DatabaseHandler.COL_TELEFONE.toInt())
+    //
+    //   saida.append("${nome} - ${telefone} \n")
+    // }
+    // Toast.makeText(
+    //    this,
+    //   saida.toString(),
+    //    Toast.LENGTH_SHORT)
+    //   .show()
 
 
-
-    } //Fim da classe MainActivity
+} //Fim da classe MainActivity
 

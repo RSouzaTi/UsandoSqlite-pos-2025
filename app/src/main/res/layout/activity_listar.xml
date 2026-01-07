@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Nenhum registro encontrado."
+        android:text="@string/nenhum_registro_encontrado"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:visibility="gone"
         tools:visibility="visible" />

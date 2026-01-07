@@ -2,7 +2,10 @@ package br.edu.utfpr.usandosqlite
 
 import android.database.Cursor
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import br.edu.utfpr.usandosqlite.adapter.MeuAdapter
 import br.edu.utfpr.usandosqlite.database.DatabaseHandler
 import br.edu.utfpr.usandosqlite.databinding.ActivityListarBinding
@@ -15,21 +18,20 @@ class ListarActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Temporarily disabled edge-to-edge for diagnostics
-        // enableEdgeToEdge()
+        enableEdgeToEdge() //1. Ativa o modo de tela cheia
 
         binding = ActivityListarBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         banco = DatabaseHandler.getInstance(this)
-
-        // Temporarily disabled window insets listener for diagnostics
-        // ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-        //     val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-        //     v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-        //     insets
-        // }
+        // 2. Adiciona o espaçamento para não sobrepor a barra de status
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+            // Pega o tamanho das barras do sistema (topo e rodapé)
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            // Aplica esse tamanho como um espaçamento (padding) no container principal
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         // Set the empty view on the ListView
         binding.lvRegistros.emptyView = binding.tvEmptyList
