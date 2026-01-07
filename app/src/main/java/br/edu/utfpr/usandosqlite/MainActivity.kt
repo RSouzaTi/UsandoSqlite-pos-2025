@@ -32,13 +32,27 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+          initView()
+    }
+
+    private fun initView() {
+        if (intent.getIntExtra("cod", 0) != 0) {
+            binding.etCod.setText( intent.getIntExtra("cod",  0).toString())
+            binding.etNome.setText(intent.getStringExtra("nome"))
+            binding.etTelefone.setText(intent.getStringExtra("telefone"))
+
+        } else {
+            //tratar a inclusão (novo registro)
+
+
+        }
+
     }
 
 
-        //Validação dos campos da tela
+    //Validação dos campos da tela
     fun btIncluirOnClick(view: View) {
-        val cadastro = Cadastro(
-            binding.etCod.text.toString().toInt(), binding.etNome.text.toString(),
+        val cadastro = Cadastro ( binding.etCod.text.toString().toInt(), binding.etNome.text.toString(),
             binding.etTelefone.text.toString()
         )
             //Acessa o banco de dados e insere o registro
@@ -54,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
     fun btAlterarOnClick(view: View) {
         //Cria um objeto do tipo Cadastro com os dados da tela
-        val cadastro = Cadastro( binding.etCod.text.toString().toInt(),
+        val cadastro = Cadastro(binding.etCod.text.toString().toInt(),
             binding.etNome.text.toString(),
             binding.etTelefone.text.toString()
         )

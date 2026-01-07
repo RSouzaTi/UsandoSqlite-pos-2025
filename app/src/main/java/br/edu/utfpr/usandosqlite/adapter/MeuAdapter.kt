@@ -1,12 +1,15 @@
 package br.edu.utfpr.usandosqlite.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageButton
 import android.widget.TextView
+import br.edu.utfpr.usandosqlite.MainActivity
 import br.edu.utfpr.usandosqlite.R
 import br.edu.utfpr.usandosqlite.database.DatabaseHandler
 import br.edu.utfpr.usandosqlite.entity.Cadastro
@@ -41,18 +44,32 @@ class MeuAdapter (val context: Context, val cursor: Cursor): BaseAdapter() {
 
         //recupera a intancia do nosso elemento lista (container com dados de cada elementoda lista)
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.elemento_lista, null)
+        val v = inflater.inflate(R.layout.elemento_lista, null)
 
         //recupera os componentes visuais da tela
-        val tvNome = view.findViewById<TextView>(R.id.tvNomeElementoLista)
-        val tvTelefone = view.findViewById<TextView>(R.id.tvTelefoneElementoLista)
+        val tvNomeElementLista = v.findViewById<TextView>(R.id.tvNomeElementoLista)
+        val tvTelefoneElementoLista = v.findViewById<TextView>(R.id.tvTelefoneElementoLista)
+        val btEditarElementoLista  = v.findViewById<ImageButton>(R.id.btEditarElementoLista)
+
 
         cursor.moveToPosition(pos)
 
-        tvNome.text = cursor.getString(DatabaseHandler.COL_NOME.toInt())
-        tvTelefone.text = cursor.getString(DatabaseHandler.COL_TELEFONE.toInt())
+        tvNomeElementLista.text = cursor.getString(DatabaseHandler.COL_NOME.toInt())
+        tvTelefoneElementoLista.text = cursor.getString(DatabaseHandler.COL_TELEFONE.toInt())
 
-        return view
+        btEditarElementoLista.setOnClickListener {
+            val intent = Intent(context, MainActivity::class.java)
+
+            cursor.moveToPosition(pos)
+
+            intent.putExtra("cod", cursor.getInt(DatabaseHandler.COL_ID.toInt()))
+            intent.putExtra("nome", cursor.getString(DatabaseHandler.COL_NOME.toInt()))
+            intent.putExtra("telefone", cursor.getString(DatabaseHandler.COL_TELEFONE.toInt()))
+
+            context.startActivity(intent)
+        }
+
+        return v
 
 
 
