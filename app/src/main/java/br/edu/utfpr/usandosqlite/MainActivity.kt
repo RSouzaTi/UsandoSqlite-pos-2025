@@ -1,8 +1,10 @@
 package br.edu.utfpr.usandosqlite
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -36,9 +38,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-         super.onStart()
-          initView()
-      }
+        super.onStart()
+        initView()
+    }
 
     private fun initView() {
         if (intent.getIntExtra("cod", 0) != 0) {
@@ -103,53 +105,64 @@ class MainActivity : AppCompatActivity() {
 
         //validação dos campos da tela
 
+        val etCodPesquisar = EditText(this)
 
-        //Acesso ao banco de dados e pesquisa o registro
-        val cadastro = banco.pesquisar(binding.etCod.text.toString().toInt())
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Digite o Código")
+        builder.setView(etCodPesquisar)
+        builder.setCancelable(false)
+        builder.setNegativeButton("Fechar", null)
+        builder.setPositiveButton("Pesquisar", { dialog, which ->
+            val cadastro = banco.pesquisar(etCodPesquisar.text.toString().toInt())
 
-        if (cadastro != null) {
+            if (cadastro != null) {
+                binding.etCod.setText(cadastro._id.toString())
+                binding.etNome.setText(cadastro.nome)
+                binding.etTelefone.setText(cadastro.telefone)
 
-            binding.etNome.setText(cadastro.nome)
-            binding.etTelefone.setText(cadastro.telefone)
+            } else {
 
-        } else {
+                binding.etNome.setText("")
+                binding.etTelefone.setText("")
+                Toast.makeText(
+                    this,
+                    "Registro não encontrado",
+                    Toast.LENGTH_SHORT
+                ).show()
 
-            binding.etNome.setText("")
-            binding.etTelefone.setText("")
-            Toast.makeText(
-                this,
-                "Registro não encontrado",
-                Toast.LENGTH_SHORT
-            ).show()
-
-
+            }
         }
-    }
-
-    fun btListarOnClick(view: View) {
-        val intent = Intent(this, ListarActivity::class.java)
-        startActivity(intent)
-    }
+        )
 
 
-    //Acessa o banco de dados e lista os registros
-    // val registros = banco.listar()
-
-    //Monta a saída para o usuário
-    //val saida = StringBuilder()
-
-    //while (registros.moveToNext()) {
-    //   val nome = registros.getString(DatabaseHandler.COL_NOME.toInt())
-    //  val telefone  = registros.getString(DatabaseHandler.COL_TELEFONE.toInt())
-    //
-    //   saida.append("${nome} - ${telefone} \n")
-    // }
-    // Toast.makeText(
-    //    this,
-    //   saida.toString(),
-    //    Toast.LENGTH_SHORT)
-    //   .show()
+        builder.show()
 
 
-} //Fim da classe MainActivity
+        fun btListarOnClick(view: View) {
+            val intent = Intent(this, ListarActivity::class.java)
+            startActivity(intent)
+        }
 
+
+        //Acessa o banco de dados e lista os registros
+        // val registros = banco.listar()
+
+        //Monta a saída para o usuário
+        //val saida = StringBuilder()
+
+        //while (registros.moveToNext()) {
+        //   val nome = registros.getString(DatabaseHandler.COL_NOME.toInt())
+        //  val telefone  = registros.getString(DatabaseHandler.COL_TELEFONE.toInt())
+        //
+        //   saida.append("${nome} - ${telefone} \n")
+        // }
+        // Toast.makeText(
+        //    this,
+        //   saida.toString(),
+        //    Toast.LENGTH_SHORT)
+        //   .show()
+
+
+    } //Fim da classe MainActivity
+
+}
