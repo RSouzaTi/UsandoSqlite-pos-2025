@@ -1,7 +1,9 @@
 package br.edu.utfpr.usandosqlite
 
+import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -33,8 +35,6 @@ class ListarActivity : AppCompatActivity() {
             insets
         }
 
-        // Set the empty view on the ListView
-        binding.lvRegistros.emptyView = binding.tvEmptyList
 
         initListView()
     }
@@ -53,5 +53,10 @@ class ListarActivity : AppCompatActivity() {
         // The adapter's cursor will be closed automatically by the activity's lifecycle management
         // when using CursorAdapter.
         adapter?.cursor?.close()
+    }
+
+    fun fabIncluirOnclick(view: View) {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 }

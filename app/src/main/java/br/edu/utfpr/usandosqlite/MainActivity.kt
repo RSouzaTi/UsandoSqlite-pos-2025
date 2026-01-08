@@ -43,6 +43,9 @@ class MainActivity : AppCompatActivity() {
 
         } else {
             //tratar a inclusão (novo registro)
+            binding.btExcluir.visibility = View.GONE
+            binding.btPesquisar.visibility = View.GONE
+
 
 
         }
