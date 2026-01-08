@@ -36,6 +36,10 @@ class ListarActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    override fun onStart() {
+        super.onStart()
         initListView()
     }
 

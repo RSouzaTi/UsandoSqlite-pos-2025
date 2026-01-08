@@ -32,8 +32,13 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        initView()
+
     }
+
+    override fun onStart() {
+         super.onStart()
+          initView()
+      }
 
     private fun initView() {
         if (intent.getIntExtra("cod", 0) != 0) {
@@ -45,7 +50,6 @@ class MainActivity : AppCompatActivity() {
             //tratar a inclusão (novo registro)
             binding.btExcluir.visibility = View.GONE
             binding.btPesquisar.visibility = View.GONE
-
 
 
         }
