@@ -1,9 +1,8 @@
 package br.edu.utfpr.usandosqlite
 
-import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
-import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -20,47 +19,56 @@ class ListarActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() //1. Ativa o modo de tela cheia
+        enableEdgeToEdge()
 
         binding = ActivityListarBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         banco = DatabaseHandler.getInstance(this)
-        // 2. Adiciona o espaçamento para não sobrepor a barra de status
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-            // Pega o tamanho das barras do sistema (topo e rodapé)
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            // Aplica esse tamanho como um espaçamento (padding) no container principal
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
+        binding.lvRegistros.emptyView = binding.tvEmptyList
 
+        setupSearchView()
+        initListView()
     }
 
-    override fun onStart() {
-        super.onStart()
-        initListView()
+    private fun setupSearchView() {
+        binding.svBusca.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                filterList(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterList(newText)
+                return true
+            }
+        })
     }
 
     private fun initListView() {
         val cursor: Cursor = banco.listar()
-
-        // The adapter will automatically handle showing the empty view
-        // when the cursor is empty.
         adapter = MeuAdapter(this, cursor)
         binding.lvRegistros.adapter = adapter
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        // The adapter's cursor will be closed automatically by the activity's lifecycle management
-        // when using CursorAdapter.
-        adapter?.cursor?.close()
+    private fun filterList(filtro: String?) {
+        val cursor: Cursor = if (filtro.isNullOrEmpty()) {
+            banco.listar()
+        } else {
+            banco.listarPorNome(filtro)
+        }
+        adapter?.changeCursor(cursor)
     }
 
-    fun fabIncluirOnclick(view: View) {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+    override fun onDestroy() {
+        super.onDestroy()
+        adapter?.cursor?.close()
     }
 }

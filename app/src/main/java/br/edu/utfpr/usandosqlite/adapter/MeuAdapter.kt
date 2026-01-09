@@ -1,80 +1,40 @@
 package br.edu.utfpr.usandosqlite.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.database.Cursor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ImageButton
+import android.widget.CursorAdapter
 import android.widget.TextView
-import br.edu.utfpr.usandosqlite.MainActivity
 import br.edu.utfpr.usandosqlite.R
 import br.edu.utfpr.usandosqlite.database.DatabaseHandler
-import br.edu.utfpr.usandosqlite.entity.Cadastro
 
+class MeuAdapter(context: Context, cursor: Cursor) : CursorAdapter(context, cursor, 0) {
 
-class MeuAdapter (val context: Context, val cursor: Cursor): BaseAdapter() {
-    override fun getCount(): Int {
-        return cursor.count
+    private class ViewHolder(view: View) {
+        val nomeTextView: TextView = view.findViewById(R.id.tvNomeElementoLista)
+        val telefoneTextView: TextView = view.findViewById(R.id.tvTelefoneElementoLista)
     }
 
-    override fun getItem(pos: Int): Any? {
-        cursor.moveToPosition(pos)
-
-        val cadastro = Cadastro(
-            cursor.getInt(DatabaseHandler.COL_ID.toInt()),
-            cursor.getString(DatabaseHandler.COL_NOME.toInt()),
-            cursor.getString(DatabaseHandler.COL_TELEFONE.toInt())
-        )
-        return cadastro
+    override fun newView(context: Context, cursor: Cursor, parent: ViewGroup): View {
+        val inflater = LayoutInflater.from(context)
+        val view = inflater.inflate(R.layout.elemento_lista, parent, false)
+        val viewHolder = ViewHolder(view)
+        view.tag = viewHolder
+        return view
     }
 
-    override fun getItemId(pos: Int): Long {
-        cursor.moveToPosition(pos)
-        return cursor.getInt(DatabaseHandler.COL_ID.toInt()).toLong()
+    override fun bindView(view: View, context: Context, cursor: Cursor) {
+        val viewHolder = view.tag as ViewHolder
+
+        val nomeIndex = cursor.getColumnIndexOrThrow(DatabaseHandler.COL_NOME)
+        val telefoneIndex = cursor.getColumnIndexOrThrow(DatabaseHandler.COL_TELEFONE)
+
+        val nome = cursor.getString(nomeIndex)
+        val telefone = cursor.getString(telefoneIndex)
+
+        viewHolder.nomeTextView.text = nome
+        viewHolder.telefoneTextView.text = telefone
     }
-
-    override fun getView(
-        pos: Int,
-        convertView: View?,
-        parent: ViewGroup?
-    ): View? {
-
-        //recupera a intancia do nosso elemento lista (container com dados de cada elementoda lista)
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val v = inflater.inflate(R.layout.elemento_lista, null)
-
-        //recupera os componentes visuais da tela
-        val tvNomeElementLista = v.findViewById<TextView>(R.id.tvNomeElementoLista)
-        val tvTelefoneElementoLista = v.findViewById<TextView>(R.id.tvTelefoneElementoLista)
-        val btEditarElementoLista  = v.findViewById<ImageButton>(R.id.btEditarElementoLista)
-
-
-        cursor.moveToPosition(pos)
-
-        tvNomeElementLista.text = cursor.getString(DatabaseHandler.COL_NOME.toInt())
-        tvTelefoneElementoLista.text = cursor.getString(DatabaseHandler.COL_TELEFONE.toInt())
-
-        btEditarElementoLista.setOnClickListener {
-            val intent = Intent(context, MainActivity::class.java)
-
-            cursor.moveToPosition(pos)
-
-            intent.putExtra("cod", cursor.getInt(DatabaseHandler.COL_ID.toInt()))
-            intent.putExtra("nome", cursor.getString(DatabaseHandler.COL_NOME.toInt()))
-            intent.putExtra("telefone", cursor.getString(DatabaseHandler.COL_TELEFONE.toInt()))
-
-            context.startActivity(intent)
-        }
-
-        return v
-
-
-
-
-
-    }
-
 }

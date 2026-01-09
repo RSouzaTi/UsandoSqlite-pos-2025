@@ -7,6 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".ListarActivity">
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/svBusca"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:iconifiedByDefault="false"
+        app:queryHint="Digite para pesquisar..."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/lvRegistros"
@@ -14,21 +23,20 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/svBusca" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabincluir"
+    <TextView
+        android:id="@+id/tvEmptyList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:onClick="fabIncluirOnclick"
-        app:layout_constraintBottom_toBottomOf="@+id/lvRegistros"
-        app:layout_constraintEnd_toEndOf="@+id/lvRegistros"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
+        android:text="@string/nenhum_registro_encontrado"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/svBusca"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
