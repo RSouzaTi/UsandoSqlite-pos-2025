@@ -13,11 +13,15 @@ import androidx.core.view.WindowInsetsCompat
 import br.edu.utfpr.usandosqlite.database.DatabaseHandler
 import br.edu.utfpr.usandosqlite.databinding.ActivityMainBinding
 import br.edu.utfpr.usandosqlite.entity.Cadastro
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var banco: DatabaseHandler
+
+    val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,34 +62,68 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun btSalvarOnClick(view: View) {
-        if (binding.etCod.text.toString().isEmpty()) {
-            val cadastro = Cadastro(
-                _id = 0,
-                nome = binding.etNome.text.toString(),
-                telefone = binding.etTelefone.text.toString()
-            )
-            //acesso ao banco
-            banco.inserir(cadastro)
-            var msg = getString(R.string.inclus_o_realizada_com_sucesso)
-        } else {
+        fun btSalvarOnClick(view: View) {
+
             val cadastro = Cadastro(
                 _id = binding.etCod.text.toString().toInt(),
                 nome = binding.etNome.text.toString(),
                 telefone = binding.etTelefone.text.toString()
             )
             //acesso ao banco
-            banco.alterar(cadastro)
-            var msg = getString(R.string.altera_o_realizada_com_sucesso)
-        }
 
-        //Mostra uma mensagem de sucesso na tela
-        Toast.makeText(
-            this,
-            "Registro inserido com sucesso",
-            Toast.LENGTH_SHORT
-        ).show()
+
+                db.collection("cadastros")
+                    .document(binding.etCod.text.toString())
+                    .set(cadastro)
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            this,
+                            "Registro inserido com sucesso",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    .addOnFailureListener { e ->
+                        Toast.makeText(
+                            this,
+                            "Erro ao inserir registro: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+
+
+                        /*  if (binding.etCod.text.toString().isEmpty()) {
+                              val cadastro = Cadastro(
+                                  _id = 0,
+                                  nome = binding.etNome.text.toString(),
+                                  telefone = binding.etTelefone.text.toString()
+                              )
+                              //acesso ao banco
+                              banco.inserir(cadastro)
+                              var msg = getString(R.string.inclus_o_realizada_com_sucesso)
+                          } else {
+                              val cadastro = Cadastro(
+                                  _id = binding.etCod.text.toString().toInt(),
+                                  nome = binding.etNome.text.toString(),
+                                  telefone = binding.etTelefone.text.toString()
+                              )
+                              //acesso ao banco
+                              banco.alterar(cadastro)
+                              var msg = getString(R.string.altera_o_realizada_com_sucesso)
+                          }
+
+                          //Mostra uma mensagem de sucesso na tela
+                          Toast.makeText(
+                              this,
+                              "Registro inserido com sucesso",
+                              Toast.LENGTH_SHORT
+                          ).show()*/
+
+                        //Volta para a tela de listagem
+                        finish ()
     }
+
 
     fun btExcluirOnClick(view: View) {
 
@@ -103,9 +141,39 @@ class MainActivity : AppCompatActivity() {
 
     fun btPesquisarOnClick(view: View) {
 
+        val msg = StringBuilder()
+
+        db.collection("cadastro")
+          .get()
+          .addOnSuccessListener { result ->
+              val registros = result.toString()
+
+              for (document in result) {
+                  val registro = document.getString("nome")
+                  msg.append(registro + "\n")
+              }
+
+              Toast.makeText(
+                  this,
+                  msg,
+                  Toast.LENGTH_SHORT
+              ).show()
+          }
+            .addOnFailureListener { e ->
+                Toast.makeText(
+                    this,
+                    "Erro ao encontrar registro: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+
+
+
+
         //validação dos campos da tela
 
-        val etCodPesquisar = EditText(this)
+        /*val etCodPesquisar = EditText(this)
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Digite o Código")
@@ -135,7 +203,7 @@ class MainActivity : AppCompatActivity() {
         )
 
 
-        builder.show()
+        builder.show()*/
 
 
         fun btListarOnClick(view: View) {
